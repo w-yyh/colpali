@@ -37,7 +37,7 @@ def load_model():
     return model, processor
 
 
-def get_preprocessor(condition: str, deg_type: str = "", rest_type: str = "") -> Callable:
+def get_preprocessor(condition: str, deg_type: str = "", rest_type: str = "", **kwargs) -> Callable:
     """Return a function: List[Image] -> List[Image] based on condition."""
     if condition == "clean":
         return lambda imgs: imgs
@@ -69,8 +69,9 @@ def get_preprocessor(condition: str, deg_type: str = "", rest_type: str = "") ->
         return lambda imgs: [rest_pipeline(deg_pipeline(img)) for img in imgs]
 
     if condition == "segmented":
-        from robust.segmentation.document_seg import segment_document
-        return lambda imgs: [segment_document(img) for img in imgs]
+        from robust.segmentation.adaptive_seg import adaptive_segment
+        seg_params = {k: v for k, v in kwargs.items() if k != "seg_method"}
+        return lambda imgs: [adaptive_segment(img, **seg_params) for img in imgs]
 
     raise ValueError(f"Unknown condition: {condition!r}")
 
@@ -99,10 +100,8 @@ def evaluate_subset(model, processor, subset_name: str, preprocess_fn: Callable)
             vecs = model(**inputs)
         all_d_vecs.extend([v.cpu().float() for v in vecs])
 
-    # Score (n_q, n_d)
-    q_tensor = torch.stack(all_q_vecs)
-    d_tensor = torch.stack(all_d_vecs)
-    scores_matrix = processor.score_multi_vector(q_tensor, d_tensor)
+    # Score (n_q, n_d) — pass as list to handle variable-length sequences
+    scores_matrix = processor.score_multi_vector(all_q_vecs, all_d_vecs)
 
     # Compute metrics (query i -> document i is the correct match)
     ndcg_list, rec_list, mrr_list = [], [], []

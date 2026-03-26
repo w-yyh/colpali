@@ -1,1 +1,1 @@
-from .document_seg import segment_document
+from .adaptive_seg import adaptive_segment
