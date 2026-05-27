@@ -1,0 +1,187 @@
+{
+  "name": "heqingze_invariant_adapter_full_train_seed13",
+  "checkpoint": "adapter_checkpoint.pt",
+  "sha256": "8235815cab30b267095aca9049dd1359a8af2ad04ac80706b33ec5e19219599c",
+  "owner": "何青泽",
+  "method": "冻结 ColQwen2 主干的 residual embedding adapter",
+  "seed": 13,
+  "adapter": {
+    "dim": 128,
+    "hidden_dim": 256,
+    "init_scale": 0.1
+  },
+  "training": {
+    "best_epoch": 1,
+    "epochs_requested": 30,
+    "epochs_run": 7,
+    "patience": 6,
+    "temperature": 0.07,
+    "learning_rate": 0.001,
+    "score_weight": 2.0,
+    "rank_weight": 0.5,
+    "identity_weight": 0.01,
+    "train_variant_count": 30,
+    "train_variants": [
+      "CS",
+      "GN",
+      "JC",
+      "LR",
+      "MB",
+      "PD",
+      "GN_CS",
+      "GN_JC",
+      "GN_LR",
+      "JC_CS",
+      "JC_LR",
+      "LR_CS",
+      "MB_CS",
+      "MB_GN",
+      "MB_JC",
+      "MB_LR",
+      "PD_CS",
+      "PD_GN",
+      "PD_JC",
+      "PD_LR",
+      "PD_MB",
+      "MB_GN_LR",
+      "MB_JC_CS",
+      "PD_JC_LR",
+      "PD_MB_GN",
+      "PD_LR_CS",
+      "PD_MB_JC",
+      "PD_JC_CS",
+      "MB_LR_CS",
+      "PD_MB_LR"
+    ],
+    "val_variant_count": 16,
+    "val_variants": [
+      "MB_JC_LR",
+      "PD_GN_JC",
+      "GN_LR_CS",
+      "GN_JC_CS",
+      "MB_GN_CS",
+      "PD_GN_LR",
+      "MB_GN_JC",
+      "PD_MB_CS",
+      "JC_LR_CS",
+      "PD_GN_CS",
+      "GN_JC_LR",
+      "PD_GN_JC_LR",
+      "PD_GN_LR_CS",
+      "PD_MB_JC_LR",
+      "MB_JC_LR_CS",
+      "MB_GN_JC_LR"
+    ],
+    "validation_metric": "验证 query group 与验证退化 variant 上的平均 nDCG@5",
+    "best_val_ndcg@5": 0.45977626847037967
+  },
+  "dataset": {
+    "doc_id": "employment_and_social_developments_in_europe_2024-KEBD24002ENN",
+    "pages": 111,
+    "query_split": {
+      "train_groups": 17,
+      "train_queries": 102,
+      "val_groups": 6,
+      "val_queries": 36,
+      "test_groups": 6,
+      "test_queries": 36
+    },
+    "main_test_variant": "PD_MB_GN_JC_LR_CS"
+  },
+  "main_test_metrics": {
+    "original": {
+      "ndcg@5": 0.45061050176071504,
+      "recall@5": 0.3726851851851852,
+      "mrr": 0.5957150361092475
+    },
+    "adapter": {
+      "ndcg@5": 0.4783891793263503,
+      "recall@5": 0.3912037037037036,
+      "mrr": 0.6174087115267322
+    },
+    "gain": {
+      "ndcg@5": 0.027778677565635235,
+      "recall@5": 0.018518518518518434,
+      "mrr": 0.02169367541748468
+    },
+    "rank_delta": {
+      "improved": 10,
+      "worsened": 8,
+      "unchanged": 18
+    }
+  },
+  "restored_proxy_metrics": {
+    "gaussian": {
+      "original": {
+        "ndcg@5": 0.43322727615881423,
+        "recall@5": 0.36342592592592593,
+        "mrr": 0.5625668629858357
+      },
+      "adapter": {
+        "ndcg@5": 0.4023831035895163,
+        "recall@5": 0.29861111111111116,
+        "mrr": 0.5712534200311488
+      },
+      "gain": {
+        "ndcg@5": -0.030844172569297945,
+        "recall@5": -0.06481481481481477,
+        "mrr": 0.00868655704531307
+      },
+      "rank_delta": {
+        "improved": 6,
+        "worsened": 11,
+        "unchanged": 19
+      }
+    },
+    "nlmeans": {
+      "original": {
+        "ndcg@5": 0.4513295202256684,
+        "recall@5": 0.33796296296296297,
+        "mrr": 0.6631167393081703
+      },
+      "adapter": {
+        "ndcg@5": 0.47453413872800937,
+        "recall@5": 0.3425925925925925,
+        "mrr": 0.6650798059636388
+      },
+      "gain": {
+        "ndcg@5": 0.023204618502340957,
+        "recall@5": 0.004629629629629539,
+        "mrr": 0.001963066655468526
+      },
+      "rank_delta": {
+        "improved": 9,
+        "worsened": 8,
+        "unchanged": 19
+      }
+    },
+    "wiener": {
+      "original": {
+        "ndcg@5": 0.47810801930202224,
+        "recall@5": 0.38657407407407407,
+        "mrr": 0.6191266400271345
+      },
+      "adapter": {
+        "ndcg@5": 0.4697981296000855,
+        "recall@5": 0.3680555555555555,
+        "mrr": 0.6159819193152526
+      },
+      "gain": {
+        "ndcg@5": -0.008309889701936746,
+        "recall@5": -0.018518518518518545,
+        "mrr": -0.0031447207118818765
+      },
+      "rank_delta": {
+        "improved": 10,
+        "worsened": 3,
+        "unchanged": 23
+      }
+    }
+  },
+  "notes": [
+    "ColQwen2 主干全程冻结。",
+    "本 checkpoint 使用完整 train variant split 训练：6 个单退化、15 个双退化、9 个三退化。",
+    "相对 degraded original，主 raw test 为正提升；但主测试 nDCG@5 低于上一版只用 6 个单退化训练的 tune_distill6 checkpoint。",
+    "Proxy restored 上 nlmeans 为正，gaussian/wiener 为负，说明完整训练集并未自然提升所有 proxy 泛化。"
+  ]
+}
