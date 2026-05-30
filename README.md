@@ -17,6 +17,45 @@ ColPali/ColQwen2 在高清、干净的数字原生 PDF 截图上表现优秀，�
 
 ---
 
+## 王昱皓：前端复原-检索解耦实验
+
+`experiments/run_restoration_analysis.py` 已补齐为可复现实验入口，用于在本地 111 页 HR 退化数据集上统一比较 `clean`、`degraded` 与 `restored` 三类输入条件。脚本会复用 ColQwen2 MaxSim 检索流程，对 `gaussian`、`nlmeans`、`wiener` 三种轻量复原方法输出 `nDCG@5`、`Recall@5`、`MRR` 和相对 degraded 的增益。
+
+推荐运行命令：
+
+```bash
+HF_ENDPOINT=https://hf-mirror.com PYTHONPATH=. conda run -n wangyuhao-colpali \
+  python experiments/run_restoration_analysis.py \
+  --dataset-root data/degraded_dataset \
+  --device cuda:0 \
+  --rest gaussian nlmeans wiener \
+  --batch-size 4 \
+  --score-batch-size 16
+```
+
+若只检查数据路径和 JSON 结构，可先运行：
+
+```bash
+PYTHONPATH=. conda run -n wangyuhao-colpali \
+  python experiments/run_restoration_analysis.py \
+  --dataset-root data/degraded_dataset \
+  --dry-run --max-queries 2 --max-docs 5
+```
+
+2026-05-30 在 `PD_MB_GN_JC_LR_CS` 复合退化上得到的固定设置结果如下：
+
+| 输入条件 | nDCG@5 | Recall@5 | MRR | 相对 degraded nDCG@5 |
+|---|---:|---:|---:|---:|
+| clean baseline | 0.5717 | 0.5829 | 0.6516 | +0.1144 |
+| degraded `PD_MB_GN_JC_LR_CS` | 0.4574 | 0.4090 | 0.6251 | 0.0000 |
+| gaussian restored | 0.4592 | 0.4072 | 0.6354 | +0.0018 |
+| nlmeans restored | 0.4645 | 0.4085 | 0.6821 | +0.0071 |
+| wiener restored | 0.4687 | 0.4194 | 0.6490 | +0.0114 |
+
+结果说明：三种轻量复原方法都只带来有限但可测的 nDCG@5 改善，`wiener` 在 nDCG@5 与 Recall@5 上最好，`nlmeans` 在 MRR 上最好；复原仍未弥合 clean 与 degraded 之间约 0.1144 的 nDCG@5 差距，因此“视觉复原”和“检索排序恢复”需要分开评估。
+
+---
+
 ## 技术路线
 
 ```text

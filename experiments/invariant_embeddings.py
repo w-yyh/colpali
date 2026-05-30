@@ -17,7 +17,6 @@ from experiments.run_local_hr_benchmark import (
     encode_documents,
     open_rgb_image,
 )
-from robust.restoration.pipeline import RestorationPipeline
 
 
 DEFAULT_CACHE_ROOT = DEFAULT_OUTPUT_DIR.parent / "invariant_cache"
@@ -46,6 +45,8 @@ def restored_proxy_variant_tag(base_variant: str, restoration: str) -> str:
 
 
 def build_restoration_preprocessor(restoration: str) -> Callable[[Image.Image], Image.Image]:
+    from robust.restoration.pipeline import RestorationPipeline
+
     if restoration not in RESTORED_PROXY_CONFIGS:
         raise ValueError(f"Unknown restored proxy {restoration!r}. Available: {sorted(RESTORED_PROXY_CONFIGS)}")
     pipeline = RestorationPipeline(RESTORED_PROXY_CONFIGS[restoration])

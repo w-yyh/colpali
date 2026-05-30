@@ -17,11 +17,9 @@ from pathlib import Path
 from typing import Dict, List, Sequence, Set
 
 import pandas as pd
-import torch
 from PIL import Image
 from tqdm import tqdm
 
-from colpali_engine.models import ColQwen2, ColQwen2Processor
 from robust.evaluation.metrics import mean_reciprocal_rank, ndcg_at_k, recall_at_k
 
 
@@ -142,6 +140,10 @@ def build_page_paths(dataset_root: Path, doc_id: str, mode: str, variant: str, m
 
 
 def load_model(model_name: str, processor_name: str, device: str, local_files_only: bool):
+    import torch
+
+    from colpali_engine.models import ColQwen2, ColQwen2Processor
+
     if device.startswith("cuda") and not torch.cuda.is_available():
         raise RuntimeError(f"CUDA device '{device}' requested, but torch.cuda.is_available() is False.")
 
@@ -161,12 +163,14 @@ def open_rgb_image(path: Path) -> Image.Image:
 
 
 def encode_queries(
-    model: ColQwen2,
-    processor: ColQwen2Processor,
+    model,
+    processor,
     queries: Sequence[str],
     batch_size: int,
     device: str,
 ) -> List[torch.Tensor]:
+    import torch
+
     embeddings: List[torch.Tensor] = []
     for start in range(0, len(queries), batch_size):
         batch = processor.process_queries(list(queries[start : start + batch_size])).to(device)
@@ -177,12 +181,14 @@ def encode_queries(
 
 
 def encode_documents(
-    model: ColQwen2,
-    processor: ColQwen2Processor,
+    model,
+    processor,
     page_paths: Sequence[Path],
     batch_size: int,
     device: str,
 ) -> List[torch.Tensor]:
+    import torch
+
     embeddings: List[torch.Tensor] = []
     for start in tqdm(range(0, len(page_paths), batch_size), desc="Encoding pages"):
         images = [open_rgb_image(path) for path in page_paths[start : start + batch_size]]

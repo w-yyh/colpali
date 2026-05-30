@@ -62,3 +62,19 @@ documents/legacy/           历史分割/PSO 等旧方案资料
 2. 保留旧实验代码，但将文档分割和 PSO 标记为历史/可选模块。
 3. 为退化不变学习和 Patch 加权新增模块骨架，便于后续填充实现。
 4. 后续代码实现应优先补齐 `run_degradation_study.py`、`run_restoration_analysis.py` 和 `run_patch_weighting_eval.py` 三类实验入口；何青泽的退化不变方向已改为 `build_invariant_splits.py`、`run_invariant_adapter_training.py` 和 `evaluate_invariant_adapter.py`。
+
+## 2026-05-30 王昱皓阶段结果
+
+`experiments/run_restoration_analysis.py` 已由占位入口补齐为可运行脚本，支持本地 HR 数据集的 clean/degraded/restored 三组对照、`gaussian`/`nlmeans`/`wiener` 三种轻量复原方法、embedding cache、dry-run 数据检查和 JSON 结果保存。
+
+固定实验设置：`PD_MB_GN_JC_LR_CS` 复合退化，111 页文档图像，174 个单文档 query，ColQwen2 标准 MaxSim 检索。结果如下：
+
+| 输入条件 | nDCG@5 | Recall@5 | MRR | 相对 degraded nDCG@5 |
+|---|---:|---:|---:|---:|
+| clean baseline | 0.5717 | 0.5829 | 0.6516 | +0.1144 |
+| degraded `PD_MB_GN_JC_LR_CS` | 0.4574 | 0.4090 | 0.6251 | 0.0000 |
+| gaussian restored | 0.4592 | 0.4072 | 0.6354 | +0.0018 |
+| nlmeans restored | 0.4645 | 0.4085 | 0.6821 | +0.0071 |
+| wiener restored | 0.4687 | 0.4194 | 0.6490 | +0.0114 |
+
+阶段结论：轻量复原确实能带来小幅检索收益，但收益远小于 clean 与 degraded 之间的性能缺口；`wiener` 更有利于 nDCG@5 和 Recall@5，`nlmeans` 更有利于 MRR。这说明复原方法需要以检索指标单独验证，不能只根据视觉清晰度判断有效性。
