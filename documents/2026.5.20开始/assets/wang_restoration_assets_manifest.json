@@ -1,0 +1,8 @@
+{
+  "chart": "documents/2026.5.20开始/assets/wang_restoration_metrics_bar.png",
+  "delta_chart": "documents/2026.5.20开始/assets/wang_restoration_delta_ndcg.png",
+  "full_page_grid": "documents/2026.5.20开始/assets/wang_restoration_page001_full_grid.png",
+  "crop_grid": "documents/2026.5.20开始/assets/wang_restoration_page001_crop_grid.png",
+  "source_page": "page_001",
+  "variant": "PD_MB_GN_JC_LR_CS"
+}
